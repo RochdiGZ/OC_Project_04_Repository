@@ -1,6 +1,3 @@
-from tinydb import TinyDB
-
-
 class Player:
     """Define the player model."""
     
@@ -20,18 +17,3 @@ class Player:
         """Update the player ranking."""
         self.ranking = new_ranking
         return self.ranking
-
-    def serial_player(self) -> dict:
-        """Serialize the class 'Player'."""
-        return {
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "date_of_birth": self.date_of_birth,
-            "gender": self.gender,
-            "ranking": self.ranking,
-            "score": self.score
-        }
-
-    def save_player(self, table_name: str, database: "TinyDB"):
-        """Insert a record into the table 'players'."""
-        database.table(table_name).insert(self.serial_player())
