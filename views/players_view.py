@@ -74,5 +74,6 @@ if __name__ == "__main__":
     player = Player()
     """Define an instance of the class View."""
     p_view = PView()
+    p_view.save_players_in_db()
     list_of_players = p_view.save_players_in_list()
     p_view.output(list_of_players)
