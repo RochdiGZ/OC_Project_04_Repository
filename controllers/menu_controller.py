@@ -136,8 +136,11 @@ class MenuController:
             if len(DB.table("tournaments")) == 0:
                 self.reports.display_table_is_empty("tournaments")
             else:
-                tournaments_list = Report.sorted_table_by(DB.table("tournaments"), "index")
-                self.reports.display_tournaments(tournaments_list)
+                tournaments = Report.sorted_table_by(DB.table("tournaments"), "index")
+                for tournament_dict in tournaments:
+                    tournament_instance = Tournament.deserialize_tournament(tournament_dict)
+                    self.tournaments.display_tournament_model(tournament_instance)
+                # self.reports.display_tournaments(tournaments)
         elif choice == 4 or choice == 5:
             if len(DB.table("tournaments")) == 0:
                 self.reports.display_table_is_empty("tournaments")
