@@ -17,10 +17,7 @@ class Tournament:
         self.rounds = []
 
     def __str__(self):
-        return f"""
-        The Tournament {self.name_t} in {self.location_t} on {self.date_t} with {self.rounds_number} rounds.
-        The time control : {self.time_control}
-        The description : {self.description}"""
+        return f"The Tournament {self.name_t} in {self.location_t} on {self.date_t} with {self.rounds_number} rounds"
 
     def serialize_tournament(self) -> dict:
         return {
