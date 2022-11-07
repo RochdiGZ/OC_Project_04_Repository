@@ -96,7 +96,7 @@ class MainController:
             # Enter the match result and update the players pair sores
             match_i.result = self.matches.enter_match_result(match_i.name_m)
             match_i.player1["score"], match_i.player2["score"] = match_i.update_participant_score(match_i.result)
-            # At the end of match, Updating participants scores in the players table by players pairs
+            # At the end of match, Updating participants scores in the table named players by players pairs
             self.players.display_player_score_updated(match_i.player1["index"])
             Player.update_player_score(match_i.player1["index"], match_i.player1["score"])
             self.players.display_player_score_updated(match_i.player2["index"])
@@ -117,13 +117,16 @@ class MainController:
         participants_data = Player.extract_participants_data(participants_indexes)
         # Set participants scores to 0
         # for participant in participants_data: participant["score"] = 0.0
+        participants_data_pairs = []
         for i in range(1, tournament_data["rounds_number"]+1):
             if i == 1:
                 participants_data = Report.sorted_list_by(participants_data, "ranking")
+                participants_indexes_pairs = Player.generate_first_round_pairs(participants_indexes)
+                participants_data_pairs = Player.extract_participants_data_pairs(participants_indexes_pairs)
             elif i > 1:
                 participants_data = Report.sorted_list_by(participants_data, "score")
                 participants_data = Report.sort_duplicated_data(participants_data)
-            participants_data_pairs = Player.get_participants_pairs(participants_data)
+                participants_data_pairs = Player.get_participants_pairs(participants_data)
             # Get the round data
             round_i = self.start_matches_of_round(i, participants_data_pairs)
             # At the end of round, Updating of the tournament rounds in the tournaments table
