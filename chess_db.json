@@ -71,6 +71,15 @@
             "gender": "F",
             "ranking": 8,
             "score": 1.0
+        },
+        "9": {
+            "index": 9,
+            "first_name": "Rochdi",
+            "last_name": "Guezguez",
+            "date_of_birth": "01/01/2001",
+            "gender": "M",
+            "ranking": 8,
+            "score": 0.0
         }
     },
     "tournaments": {

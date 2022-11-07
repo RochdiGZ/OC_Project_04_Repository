@@ -59,7 +59,7 @@ class MenuController:
                 # update a player ranking in database
                 player_index = self.players.enter_player_index()
                 self.players.display_enter_player_ranking(player_index)
-                new_ranking = self.players.enter_ranking()
+                new_ranking = self.players.enter_ranking(update=True, add=False)
                 Player.update_player_ranking(player_index, new_ranking)
             self.access_to_players_menu()
         elif choice == 3:

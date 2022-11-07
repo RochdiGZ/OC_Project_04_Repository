@@ -51,7 +51,7 @@ class Players(Style):
             return self.enter_date_of_birth()
 
     def enter_gender(self) -> str:
-        self.console.print("-" * 15 + " Please, enter the gender : ", end=" : ", style=self.style_y)
+        self.console.print("-" * 15 + " Please, enter the gender", end=" : ", style=self.style_y)
         gender = input().upper()
         try:
             if gender in ["M", "F"]:
@@ -59,23 +59,27 @@ class Players(Style):
             else:
                 raise ValueError
         except ValueError:
-            self.console.print("Please, you must reenter M or F for the gender.", end=" :", style=self.style_r)
+            self.console.print("Please, you must reenter M or F for the gender.", style=self.style_r)
             return self.enter_gender()
 
-    def enter_ranking(self) -> int:
+    def enter_ranking(self, update: bool, add: bool) -> int:
+        number = len(DB.table("players"))
         try:
             ranking = int(input())
-            if ranking in range(1, len(DB.table("players"))+1):
+            if update and (ranking in range(1, number + 1)) or add and (ranking in range(1, number + 2)):
                 return ranking
             else:
                 raise ValueError
         except ValueError:
-            self.console.print("Please, you must reenter a ranking from 1 to " + str(len(DB.table("players"))),
-                               end=" : ", style=self.style_r)
-            return self.enter_ranking()
+            if update:
+                self.console.print("Please, you must reenter a ranking from 1 to " + str(number),
+                                   end=".", style=self.style_r)
+            self.console.print("Please, you must reenter a ranking from 1 to " + str(number+1),
+                               end=".", style=self.style_r)
+            return self.enter_ranking(update, add)
 
     def enter_player_index(self) -> int:
-        self.console.print("-" * 15 + " Please, enter the player index : ", end=" : ", style=self.style_b)
+        self.console.print("-" * 15 + " Please, enter the player index", end=" : ", style=self.style_b)
         try:
             player_index = int(input())
             if player_index > 0:
@@ -111,6 +115,10 @@ class Players(Style):
                 return self.enter_indexes(players_indexes, players_number)
             return indexes
 
+    def display_enter_player_ranking(self, index: int):
+        self.console.print("-" * 15 + " Please, enter the new ranking of player index " + str(index), end=" : ",
+                           style=self.style_g)
+
     def display_generating_database(self, number: int):
         self.console.print(f"{number} players have been generated and added in the database named chess_db.json.",
                            style=self.style_b)
@@ -121,10 +129,6 @@ class Players(Style):
     def display_player_score_updated(self, index: int):
         self.console.print("The score of player index " + str(index) + " has been updated in the database",
                            end=".", style=self.style_g)
-
-    def display_enter_player_ranking(self, index: int):
-        self.console.print("-" * 15 + " Please, enter the new ranking of player index " + str(index), end=" : ",
-                           style=self.style_g)
 
     def display_player_model(self, player: "Player"):
         self.console.print(player, style=self.style_g)
