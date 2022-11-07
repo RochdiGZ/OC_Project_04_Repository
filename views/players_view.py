@@ -1,8 +1,10 @@
 import re
+from tinydb import TinyDB
 from models.console_style_model import Style
 from models.player_model import Player
 NAME_REGEX = "^[A-Z]{1}[a-z]+$"
 DATE_REGEX = "^[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}$"
+DB = TinyDB("chess_db.json", indent=4, sort_keys=False)
 
 
 class Players(Style):
@@ -63,13 +65,13 @@ class Players(Style):
     def enter_ranking(self) -> int:
         try:
             ranking = int(input())
-            if ranking > 0:
+            if ranking in range(1, len(DB.table("players"))+1):
                 return ranking
             else:
                 raise ValueError
         except ValueError:
-            self.console.print(" Please, you must reenter a strictly positive number for the ranking.",
-                               style=self.style_r)
+            self.console.print("Please, you must reenter a ranking from 1 to " + str(len(DB.table("players"))),
+                               end=" : ", style=self.style_r)
             return self.enter_ranking()
 
     def enter_player_index(self) -> int:
