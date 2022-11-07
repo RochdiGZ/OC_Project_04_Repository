@@ -1,0 +1,5 @@
+.vscode
+env
+__pycache__/
+db_chess.json
+flake8_report/
