@@ -22,7 +22,7 @@ class Reports(Style):
 
     def display_tournaments(self, data: list):
         for tournament in data:
-            self.console.print(f"""The tournament {tournament["name_t"]} has been created on {tournament["date_t"]}
+            self.console.print(f"""The tournament {tournament["name_t"]} was created on {tournament["date_t"]}
             in {tournament["location_t"]}""", style=self.style_b)
 
     def display_round_match(self, match_i: dict, style: str):
