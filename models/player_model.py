@@ -38,7 +38,7 @@ class Player:
         DB.table("players").update({"ranking": new_ranking}, where("index") == index)
 
     @staticmethod
-    def update_player_score(index: int, new_score: int):
+    def update_player_score(index: int, new_score: float):
         """Update the player ranking."""
         DB.table("players").update({"score": new_score}, where("index") == index)
 

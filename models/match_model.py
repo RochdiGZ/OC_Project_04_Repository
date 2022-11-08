@@ -29,7 +29,7 @@ class Match:
     def deserialize_match(data: dict) -> "Match":
         return Match(data["match_index"], data["name_m"], data["player1"], data["player2"])
 
-    def update_participant_score(self, match_result) -> (float, float):
+    def update_participant_score(self, match_result: int) -> (float, float):
         match match_result:
             case 0:  # no winner (draw match)
                 self.player1["score"] += 0.5

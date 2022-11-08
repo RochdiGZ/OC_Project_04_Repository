@@ -58,8 +58,7 @@ class MenuController:
             else:
                 # update a player ranking in database
                 player_index = self.players.enter_player_index()
-                self.players.display_enter_player_ranking(player_index)
-                new_ranking = self.players.enter_ranking(update=True, add=False)
+                new_ranking = self.players.enter_ranking(player_index, update=True, add=False)
                 Player.update_player_ranking(player_index, new_ranking)
             self.access_to_players_menu()
         elif choice == 3:
@@ -94,8 +93,7 @@ class MenuController:
             self.reports.display_table_is_empty("tournaments")
         else:
             # Select and start a tournament
-            tournaments_indexes = Tournament.extract_tournaments_indexes()
-            tournament_index = self.tournaments.enter_tournament_index(tournaments_indexes)
+            tournament_index = self.tournaments.enter_tournament_index()
             tournament_data = Tournament.extract_tournament_data(tournament_index)
             if len(tournament_data["rounds"]) == 0:
                 tournament_data = self.controllers.start_tournament(tournament_index)
@@ -146,8 +144,7 @@ class MenuController:
             if len(DB.table("tournaments")) == 0:
                 self.reports.display_table_is_empty("tournaments")
             else:
-                tournaments_indexes = Tournament.extract_tournaments_indexes()
-                tournament_index = self.tournaments.enter_tournament_index(tournaments_indexes)
+                tournament_index = self.tournaments.enter_tournament_index()
                 # Select a tournament
                 tournament_data = self.controllers.select_tournament(tournament_index)
                 participants_indexes = tournament_data["participants"]

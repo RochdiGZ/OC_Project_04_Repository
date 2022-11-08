@@ -1,11 +1,13 @@
+import re
 from models.console_style_model import Style
 from models.tournament_model import Tournament
-import re
+from tinydb import TinyDB
 
 NAME_REGEX = "^[A-Z]{1}[a-z]+$"
 DATE_REGEX = "^[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{4}$"
 TIME_CONTROL_REGEX = "^blitz$|^bullet$|^quick hit$"
 NUMBER_REGEX = "^[1-5]{1}$"
+DB = TinyDB("chess_db.json", indent=4, sort_keys=False)
 
 
 class Tournaments(Style):
@@ -82,19 +84,20 @@ class Tournaments(Style):
                                style=self.style_r)
             return self.enter_number_of_rounds()
 
-    def enter_tournament_index(self, tournaments_indexes: list) -> int:
-        self.console.print("-" * 5 + " Please, Enter the tournament index > 0", end=" : ", style=self.style_g)
+    def enter_tournament_index(self) -> int:
+        number = len(DB.table("tournaments"))
+        self.console.print("-" * 5 + " Please, Enter the tournament index from 1 to " + str(number), end=" : ",
+                           style=self.style_g)
         try:
             tournament_index = int(input())
-            if tournament_index in tournaments_indexes:
+            if tournament_index in range(1, number + 1):
                 return tournament_index
             else:
                 raise ValueError
         except ValueError:
-            self.console.print("The tournament index is not exist in the tournaments table.", style=self.style_r)
-            self.console.print("Please, you must respect the condition for reentering the another tournament index.",
+            self.console.print("Please, you must reenter a tournament index from 1 to " + str(number),
                                style=self.style_r)
-            return self.enter_tournament_index(tournaments_indexes)
+            return self.enter_tournament_index()
 
     def enter_response(self) -> str:
         self.console.print("-" * 5 + " Would do you like to update the participants rankings ? (Yes, Y / No, N)",

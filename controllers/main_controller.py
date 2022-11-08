@@ -36,8 +36,7 @@ class MainController:
         date_of_birth = self.players.enter_date_of_birth()
         gender = self.players.enter_gender()
         player = Player(first_name, last_name, date_of_birth, gender)
-        self.players.display_enter_player_ranking(player.index)
-        player.ranking = self.players.enter_ranking(update=False, add=True)
+        player.ranking = self.players.enter_ranking(player.index, update=False, add=True)
         return player
 
     def add_player(self):
@@ -146,7 +145,7 @@ class MainController:
             participants_indexes = tournament_data["participants"]
             for index in participants_indexes:
                 self.players.display_enter_player_ranking(index)
-                new_ranking = self.players.enter_ranking(update=True, add=False)
+                new_ranking = self.players.enter_ranking(index, update=True, add=False)
                 Player.update_player_ranking(index, new_ranking)
         else:
             self.tournaments.display_no_updating_rankings()
