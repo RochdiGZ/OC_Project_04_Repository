@@ -1,6 +1,6 @@
 .vscode
-project_env
+env
+tmp_env
 __pycache__/
 flake8_report/
 chess_db.json
-
