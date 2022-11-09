@@ -36,15 +36,15 @@ class Match:
                 self.player2["score"] += 0.5
             case 1:  # player 1 wins
                 self.player1["score"] += float(1)
-            case 2:  # player 2 wins
+            case _:  # player 2 wins
                 self.player2["score"] += float(1)
         return self.player1["score"], self.player2["score"]
 
     @staticmethod
-    def verify_duplicate(scores_matches: list) -> bool:
+    def verify_duplicate(participants_scores: list) -> bool:
         # verify duplicate score for each match
         duplicate = False
-        for score in scores_matches:
+        for score in participants_scores:
             if score[0] == score[1]:
                 duplicate = True
         return duplicate

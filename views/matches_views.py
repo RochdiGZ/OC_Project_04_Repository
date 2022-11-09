@@ -34,3 +34,7 @@ class Matches(Style):
         else:
             self.console.print(match, style=self.style_g)
         print()
+
+    def display_all_matches(self, all_matches: list):
+        for match in all_matches:
+            self.console.print(match, style=self.style_g)

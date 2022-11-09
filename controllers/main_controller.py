@@ -4,7 +4,6 @@ from time import sleep
 # import models
 from models.match_model import Match
 from models.player_model import Player
-from models.report_model import Report
 from models.round_model import Round
 from models.tournament_model import Tournament
 # import views
@@ -20,6 +19,8 @@ PARTICIPANTS_NUMBER = 8
 
 class MainController:
     """Main controller."""
+    all_matches = []
+
     def __init__(self):
         """Initialize models and views."""
         self.menus = Menus()
@@ -105,8 +106,13 @@ class MainController:
         for match_i in round_i.matches:
             self.matches.display_match_model(match_i)
         round_i.end_date_time = datetime.now().strftime("%x %X")
+        # Display round matches
+        round_matches = []
+        for match in round_i.matches:
+            round_matches.append(match.serialize_match())
+        round_i.matches = round_matches
         self.rounds.display_round_model(round_i)
-        self.rounds.display_end_round(round_index)
+        self.rounds.display_end_round(round_i.index)
         return round_i
 
     def start_tournament(self, tournament_index: int) -> dict:
@@ -114,29 +120,17 @@ class MainController:
         tournament_data = self.select_tournament(tournament_index)
         participants_indexes = tournament_data["participants"]
         participants_data = Player.extract_participants_data(participants_indexes)
-        # Set participants scores to 0
-        # for participant in participants_data: participant["score"] = 0.0
-        participants_data_pairs = []
         for i in range(1, tournament_data["rounds_number"]+1):
             if i == 1:
-                participants_data = Report.sorted_list_by(participants_data, "ranking")
-                participants_indexes_pairs = Player.generate_first_round_pairs(participants_indexes)
-                participants_data_pairs = Player.extract_participants_data_pairs(participants_indexes_pairs)
-            elif i > 1:
-                participants_data = Report.sorted_list_by(participants_data, "score")
-                participants_data = Report.sort_duplicated_data(participants_data)
-                participants_data_pairs = Player.get_participants_pairs(participants_data)
+                participants_data_pairs = Player.generate_first_round_pairs(participants_data)
+            else:
+                participants_data_pairs = Player.generate_next_round_pairs(participants_data)
             # Get the round data
             round_i = self.start_matches_of_round(i, participants_data_pairs)
             # At the end of round, Updating of the tournament rounds in the tournaments table
-            matches_list = []
-            for match in round_i.matches:
-                matches_list.append(match.serialize_match())
-            round_i.matches = matches_list
             round_data = round_i.serialize_round()
             tournament_data["rounds"].append(round_data)
             Tournament.update_tournament(tournament_index, tournament_data["rounds"])
-
         return tournament_data
 
     def updating_after_end_tournament(self, tournament_data: dict):

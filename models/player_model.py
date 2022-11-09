@@ -76,13 +76,6 @@ class Player:
             participants_data_pairs.append([player_data1, player_data2])
         return participants_data_pairs
 
-    @classmethod
-    def get_participants_pairs(cls, participants_data: list) -> list:
-        participants_pairs = []
-        for i in range(0, len(participants_data), 2):
-            participants_pairs.append([participants_data[i], participants_data[i+1]])
-        return participants_pairs
-
     @staticmethod
     def get_participants_by_key(participants_data: list, dict_key: str) -> list:
         participants_by_key = []
@@ -96,18 +89,18 @@ class Player:
         return participants_indexes
 
     @staticmethod
-    def generate_first_round_pairs(participants_indexes: list) -> list:
-        half = len(participants_indexes) // 2
-        list1 = participants_indexes[:half]
-        list2 = participants_indexes[half:]
-        participants_pairs = []
-        for index1, index2 in zip(list1, list2):
-            participants_pairs.append([index1, index2])
-        return participants_pairs
+    def generate_first_round_pairs(participants_data: list) -> list:
+        half = len(participants_data) // 2
+        list1 = participants_data[:half]
+        list2 = participants_data[half:]
+        participants_data_pairs = []
+        for p1, p2 in zip(list1, list2):
+            participants_data_pairs.append([p1, p2])
+        return participants_data_pairs
 
     @staticmethod
-    def generate_next_round_pairs(participants_indexes: list) -> list:
-        participants_pairs = []
-        for p1, p2 in zip(participants_indexes[0::2], participants_indexes[1::2]):
-            participants_pairs.append([p1, p2])
-        return participants_pairs
+    def generate_next_round_pairs(participants_data: list) -> list:
+        participants_data_pairs = []
+        for p1, p2 in zip(participants_data[0::2], participants_data[1::2]):
+            participants_data_pairs.append([p1, p2])
+        return participants_data_pairs
