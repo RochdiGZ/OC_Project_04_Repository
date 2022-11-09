@@ -2,4 +2,5 @@
 project_env/
 __pycache__/
 flake8_report/
+chess_db.json
 
