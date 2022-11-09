@@ -1,6 +1,2 @@
 .vscode
-env/
-tmp_env/
 __pycache__/
-chess_db.json
-project_env/
