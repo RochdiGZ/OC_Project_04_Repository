@@ -21,6 +21,7 @@ class Reports(Style):
                                    style=self.style_g)
 
     def display_tournaments(self, data: list):
+        print()
         for tournament in data:
             self.console.print(f"""The tournament {tournament["name_t"]} was created on {tournament["date_t"]}
             in {tournament["location_t"]}""", style=self.style_b)

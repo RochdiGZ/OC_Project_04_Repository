@@ -122,15 +122,19 @@ class Players(Style):
                            style=self.style_g)
 
     def display_generating_database(self, number: int):
+        print()
         self.console.print(f"{number} players have been generated and added in the database named chess_db.json.",
                            style=self.style_b)
 
     def display_player_created(self):
+        print()
         self.console.print("A player has been created and added in database.", style=self.style_g)
 
     def display_player_score_updated(self, index: int):
         self.console.print("The score of player index " + str(index) + " has been updated in the database",
                            end=".", style=self.style_g)
+        print()
 
     def display_player_model(self, player: "Player"):
+        print()
         self.console.print(player, style=self.style_g)

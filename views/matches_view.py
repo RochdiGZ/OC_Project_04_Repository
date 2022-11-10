@@ -36,5 +36,6 @@ class Matches(Style):
         print()
 
     def display_all_matches(self, all_matches: list):
+        print()
         for match in all_matches:
             self.console.print(match, style=self.style_g)

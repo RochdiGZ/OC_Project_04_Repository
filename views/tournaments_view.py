@@ -130,4 +130,5 @@ class Tournaments(Style):
         self.console.rule("[bold red]You have not chosen to update the rankings after the end of tournament[/]")
 
     def display_tournament_model(self, tournament: "Tournament"):
+        print()
         self.console.print(tournament, style=self.style_r)

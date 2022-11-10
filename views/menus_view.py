@@ -7,6 +7,7 @@ class Menus(Style):
         super().__init__()
 
     def choice(self, index: int) -> int:
+        print()
         try:
             self.console.print("Please, enter your choice from 1 to " + str(index), end=" : ", style=self.style_y)
             number = int(input())
@@ -20,6 +21,7 @@ class Menus(Style):
             return self.choice(index)
 
     def display_main_menu(self):
+        print()
         console = Console(width=40)
         console.print("Main menu", style=self.style_g, justify="center")
         console.print("1. Players", style=self.style_b, justify="left")
@@ -28,6 +30,7 @@ class Menus(Style):
         console.print("4. Exit", style=self.style_b, justify="left")
 
     def display_players_menu(self):
+        print()
         console = Console(width=40)
         console.print("Players menu", style=self.style_r, justify="center")
         console.print("1. Add a player", style=self.style_g, justify="left")
@@ -35,6 +38,7 @@ class Menus(Style):
         console.print("3. Back to main menu", style=self.style_g, justify="left")
 
     def display_tournaments_menu(self):
+        print()
         console = Console(width=40)
         console.print("Tournaments menu", style=self.style_b, justify="center")
         console.print("1. Create and start a tournament", style=self.style_r, justify="left")
@@ -42,6 +46,7 @@ class Menus(Style):
         console.print("3. Back to main menu", style=self.style_g, justify="left")
 
     def display_reports_menu(self):
+        print()
         console = Console(width=80)
         console.print("Reports menu", style=self.style_r, justify="center")
         console.print("1. Display the sorted all players by name", style=self.style_g, justify="left")
