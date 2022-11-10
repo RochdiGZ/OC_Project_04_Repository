@@ -113,6 +113,6 @@ Project 04: Develop a software program in Python (Develop an application to mana
                 python main.py
 		
 ------------------------------------------------------------------------------------------------------------------------
-For any information on the needs of running the main.py Python script, please contact me by email:
+For any information on the needs of running the main Python script (main.py), please contact me by email:
 Rochdi.GUEZGUEZ@Gmail.Com
 ------------------------------------------------------------------------------------------------------------------------
