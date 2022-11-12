@@ -44,3 +44,22 @@ class Report:
                     k += 1
             p = p + 1
         return data_list
+
+    def sort_by_ranking(self, data: list):
+        all_participants = []
+        i = 0
+        c = i
+        while c < len(data):
+            duplicated_scores = []
+            while i < len(data)-1 and data[i]["score"] == data[i+1]["score"]:
+                i += 1
+            if i != c:
+                for k in range(c, i+1):
+                    duplicated_scores.append(data[k])
+                sorted_participants = self.sorted_list_by(duplicated_scores, "ranking")
+                all_participants.append(sorted_participants)
+            else:
+                all_participants.append(data[i])
+            i += 1
+            c = i
+        return all_participants

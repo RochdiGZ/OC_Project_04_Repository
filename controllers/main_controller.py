@@ -116,37 +116,46 @@ class MainController:
         self.rounds.display_end_round(round_i.index)
         return round_i
 
-    def regenerate_participants_pairs(self, pairs: list, all_matches: list) -> list:
-        for k in range(len(pairs)-1):
-            if pairs[k] in all_matches:
-                pair1 = [pairs[k][0], pairs[k][1]]
-                pair2 = [pairs[k][1], pairs[k][0]]
-                pair3 = [pairs[k][0], pairs[k + 1][0]]
-                pair4 = [pairs[k][0], pairs[k + 1][1]]
-                pair5 = [pairs[k][1], pairs[k + 1][0]]
-                pair6 = [pairs[k][1], pairs[k + 1][1]]
-                if (pair1 in all_matches or pair2 in all_matches) and (pair3 not in all_matches):
-                    if pair1 in all_matches:
-                        pairs[k][1], pairs[k + 1][0] = pairs[k + 1][0], pairs[k][1]
-                    elif pair2 in all_matches:
-                        pairs[k][1], pairs[k + 1][0] = pairs[k + 1][0], pairs[k][1]
-                elif (pair1 in all_matches or pair2 in all_matches) and (pair4 not in all_matches):
-                    if pair1 in all_matches:
-                        pairs[k][1], pairs[k + 1][1] = pairs[k + 1][1], pairs[k][1]
-                    elif pair2 in all_matches:
-                        pairs[k][1], pairs[k + 1][1] = pairs[k + 1][1], pairs[k][1]
-                if (pair1 in all_matches or pair2 in all_matches) and (pair5 not in all_matches):
-                    if pair1 in all_matches:
-                        pairs[k][0], pairs[k + 1][0] = pairs[k + 1][0], pairs[k][0]
-                    elif pair2 in all_matches:
-                        pairs[k][0], pairs[k + 1][0] = pairs[k + 1][0], pairs[k][0]
-                elif (pair1 in all_matches or pair2 in all_matches) and (pair6 not in all_matches):
-                    if pair1 in all_matches:
-                        pairs[k][0], pairs[k + 1][1] = pairs[k + 1][1], pairs[k][0]
-                    if pair2 in all_matches:
-                        pairs[k][0], pairs[k + 1][1] = pairs[k + 1][1], pairs[k][0]
-        if pairs[len(pairs)-1] in all_matches:
-            return self.regenerate_participants_pairs(pairs[::-1], all_matches)
+    @staticmethod
+    def regenerate_participants_pairs(pair: list, next_pair: list, all_matches: list) -> (list, list):
+        if pair in all_matches:
+            pair1 = [pair[0], pair[1]]
+            pair2 = [pair[1], pair[0]]
+            pair3 = [pair[0], next_pair[0]]
+            pair4 = [pair[0], next_pair[1]]
+            pair5 = [pair[1], next_pair[0]]
+            pair6 = [pair[1], next_pair[1]]
+            if (pair1 in all_matches) and (pair3 not in all_matches and pair3[::-1] not in all_matches):
+                pair[1], next_pair[0] = next_pair[0], pair[1]
+            elif (pair2 in all_matches) and (pair3 not in all_matches and pair3[::-1] not in all_matches):
+                pair[1], next_pair[0] = next_pair[0], pair[1]
+            elif (pair1 in all_matches) and (pair4 not in all_matches and pair4[::-1] not in all_matches):
+                pair[1], next_pair[1] = next_pair[1], pair[1]
+            elif (pair2 in all_matches) and (pair4 not in all_matches and pair4[::-1] not in all_matches):
+                pair[1], next_pair[1] = next_pair[1], pair[1]
+            elif (pair1 in all_matches) and (pair5 not in all_matches and pair5[::-1] not in all_matches):
+                pair[0], next_pair[0] = next_pair[0], pair[0]
+            elif (pair2 in all_matches) and (pair5 not in all_matches and pair5[::-1] not in all_matches):
+                pair[0], next_pair[0] = next_pair[0], pair[0]
+            elif (pair1 in all_matches) and (pair6 not in all_matches and pair6[::-1] not in all_matches):
+                pair[0], next_pair[1] = next_pair[1], pair[0]
+            elif (pair2 in all_matches) and (pair6 not in all_matches and pair6[::-1] not in all_matches):
+                pair[0], next_pair[1] = next_pair[1], pair[0]
+        return pair, next_pair
+
+    def get_new_pairs(self, pairs: list, all_matches: list):
+        for k in range(len(pairs)):
+            if (k < len(pairs)-1) and (pairs[k] in all_matches):
+                pairs[k], pairs[k + 1] = self.regenerate_participants_pairs(pairs[k], pairs[k + 1], all_matches)
+            elif (k < len(pairs)-1) and (pairs[k][::-1] in all_matches):
+                pairs[k + 1], pairs[k] = self.regenerate_participants_pairs(pairs[k + 1], pairs[k], all_matches)
+            elif (k == len(pairs)-1) and (pairs[k] in all_matches):
+                pairs[k], pairs[0] = self.regenerate_participants_pairs(pairs[k], pairs[0], all_matches)
+            elif (k == len(pairs)-1) and (pairs[k][::-1] in all_matches):
+                pairs[0], pairs[k] = self.regenerate_participants_pairs(pairs[0], pairs[k], all_matches)
+        if (pairs[0] in all_matches) or (pairs[0][::-1] in all_matches):
+            for i in range(len(pairs)-2):
+                pairs[i], pairs[i+1] = self.regenerate_participants_pairs(pairs[i], pairs[i+1], all_matches)
         return pairs
 
     def start_tournament(self, tournament_index: int) -> dict:
@@ -161,8 +170,9 @@ class MainController:
                 participants_data_pairs = Player.generate_first_round_pairs(participants_data)
             else:
                 participants_data = Report.sorted_list_by(participants_data, "score")
+                participants_data = Report.sort_duplicated_data(participants_data)
                 participants_data_pairs = Player.generate_next_round_pairs(participants_data)
-                participants_data_pairs = self.regenerate_participants_pairs(participants_data_pairs, all_matches)
+                participants_data_pairs = self.get_new_pairs(participants_data_pairs, all_matches)
             # Add the round matches
             for pair in participants_data_pairs:
                 all_matches.append(pair)
